@@ -1,0 +1,22 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: echo "Placeholder for dependency installation"
+
+    - name: Run Unit Tests
+      run: echo "Placeholder for running unit tests"
+
+    - name: Deploy to Production
+      run: echo "Placeholder for deployment"
