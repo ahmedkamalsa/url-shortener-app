@@ -1,0 +1,59 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #1e1e1e; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); text-align: center; max-width: 500px; width: 100%; }
+        h1 { margin-top: 0; }
+        input[type="text"], input[type="url"] { width: 95%; padding: 12px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #444; background-color: #333; color: #e0e0e0; font-size: 16px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 4px; background-color: #007bff; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #0056b3; }
+        .result, .error { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .result { background-color: #2a3d2a; border: 1px solid #4caf50; display: flex; justify-content: space-between; align-items: center; }
+        .error { background-color: #4d2a2a; border: 1px solid #f44336; color: #f8c8c8; }
+        .result button { width: auto; background-color: #4caf50; }
+        .result button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <form action="/shorten" method="post">
+            <input type="url" name="url" placeholder="Enter your long URL" value="{{ url or '' }}" required>
+            <input type="text" name="custom_code" placeholder="Custom short code (optional)" value="{{ custom_code or '' }}">
+            <button type="submit">Shorten</button>
+        </form>
+        {% if new_url %}
+        <div class="result">
+            <span>Your new short URL is: <a id="short-url-link" href="{{ new_url }}" target="_blank">{{ new_url }}</a></span>
+            <button id="copy-button">Copy</button>
+        </div>
+        {% endif %}
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        const copyButton = document.getElementById('copy-button');
+        if (copyButton) {
+            copyButton.addEventListener('click', () => {
+                const urlToCopy = document.getElementById('short-url-link').href;
+                navigator.clipboard.writeText(urlToCopy).then(() => {
+                    copyButton.textContent = 'Copied!';
+                    copyButton.style.backgroundColor = '#28a745';
+                    setTimeout(() => {
+                        copyButton.textContent = 'Copy';
+                        copyButton.style.backgroundColor = '#4caf50';
+                    }, 2000);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
